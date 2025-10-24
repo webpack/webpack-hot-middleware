@@ -10,7 +10,8 @@
     "reloading",
     "hot-reloading",
     "middleware",
-    "express"
+    "express",
+    "bundler"
   ],
   "main": "middleware.js",
   "scripts": {
