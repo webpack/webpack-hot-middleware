@@ -7,7 +7,9 @@
   "dependencies": {
     "console-stamp": "^0.2.9",
     "express": "^4.17.1",
+    "file-loader": "^6.2.0",
     "morgan": "^1.10.0",
+    "style-loader": "^4.0.0",
     "webpack": "^5.74.0",
     "webpack-dev-middleware": "^5.3.3",
     "webpack-hot-middleware": "file:.."
