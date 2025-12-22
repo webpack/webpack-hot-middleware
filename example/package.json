@@ -16,6 +16,9 @@
   },
   "scripts": {
     "start:base": "WEBPACK_CONFIG=./webpack.config.js node server.js",
+    "start:csp": "WEBPACK_CONFIG=./webpack.config.csp.js node server.js",
+    "start:csp::violate": "WEBPACK_HOT_MIDDLEWARE_VIOLATE_CSP=true npm run start:csp",
+    "start:headless-styling": "WEBPACK_CONFIG=./webpack.config.headless-styling.js node server.js",
     "start:multientry": "WEBPACK_CONFIG=./webpack.config.multientry.js node server.js"
   }
 }
