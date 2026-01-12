@@ -44,10 +44,17 @@ app.get('/', function (req, res) {
 app.get('/multientry', function (req, res) {
   res.sendFile(__dirname + '/index-multientry.html');
 });
+app.get('/csp', function (req, res) {
+  res.set('Content-Security-Policy', "style-src 'self';");
+  res.sendFile(__dirname + '/index-csp.html');
+});
+app.get('/headless-styling', function (req, res) {
+  res.sendFile(__dirname + '/index-headless-styling.html');
+});
 
 if (require.main === module) {
   var server = http.createServer(app);
-  server.listen(process.env.PORT || 1616, "localhost", function () {
+  server.listen(process.env.PORT || 1616, 'localhost', function () {
     console.log('Listening on %j', server.address());
   });
 }

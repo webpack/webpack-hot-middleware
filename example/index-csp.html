@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Webpack Hot Middleware CSP Example</title>
+  </head>
+  <body>
+    <div id="app" data-overlay-style-mode="headless">
+      <p id="time">Date</p>
+      <input
+        type="text"
+        size="40"
+        placeholder="Type something in here to prove state isn't lost"
+      />
+    </div>
+    <script src="/client.js"></script>
+    <script src="/csp.js"></script>
+  </body>
+</html>

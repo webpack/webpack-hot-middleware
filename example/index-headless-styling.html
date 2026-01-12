@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Webpack Hot Middleware Headless Styling Example</title>
+    <style>
+      .webpack-hot-middleware-clientOverlay__problem-group {
+        margin-bottom: 26px;
+      }
+
+      .webpack-hot-middleware-clientOverlay__problem {
+        color: #ffffff;
+        padding: 3px 6px;
+        border-radius: 4px;
+      }
+
+      .webpack-hot-middleware-clientOverlay__problem--error {
+        background-color: #000000;
+      }
+
+      .webpack-hot-middleware-clientOverlay__problem--warning {
+        background-color: #000000;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app" data-overlay-style-mode="headless">
+      <p id="time">Date</p>
+      <input
+        type="text"
+        size="40"
+        placeholder="Type something in here to prove state isn't lost"
+      />
+    </div>
+    <script src="/client.js"></script>
+    <script src="/headless-styling.js"></script>
+  </body>
+</html>

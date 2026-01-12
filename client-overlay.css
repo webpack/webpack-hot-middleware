@@ -1,0 +1,36 @@
+.webpack-hot-middleware-clientOverlay {
+  background: rgba(0, 0, 0, 0.85);
+  color: #e8e8e8;
+  line-height: 1.6;
+  white-space: pre;
+  font-family: Menlo, Consolas, monospace;
+  font-size: 13px;
+  position: fixed;
+  z-index: 9999;
+  padding: 10px;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  overflow: auto;
+  dir: ltr;
+  text-align: left;
+}
+
+.webpack-hot-middleware-clientOverlay__problem-group {
+  margin-bottom: 26px;
+}
+
+.webpack-hot-middleware-clientOverlay__problem {
+  color: #000000;
+  padding: 3px 6px;
+  border-radius: 4px;
+}
+
+.webpack-hot-middleware-clientOverlay__problem--error {
+  background-color: #ff3348;
+}
+
+.webpack-hot-middleware-clientOverlay__problem--warning {
+  background-color: #ffd30e;
+}
