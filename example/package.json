@@ -7,13 +7,18 @@
   "dependencies": {
     "console-stamp": "^0.2.9",
     "express": "^4.17.1",
+    "file-loader": "^6.2.0",
     "morgan": "^1.10.0",
+    "style-loader": "^4.0.0",
     "webpack": "^5.74.0",
     "webpack-dev-middleware": "^5.3.3",
     "webpack-hot-middleware": "file:.."
   },
   "scripts": {
     "start:base": "WEBPACK_CONFIG=./webpack.config.js node server.js",
+    "start:csp": "WEBPACK_CONFIG=./webpack.config.csp.js node server.js",
+    "start:csp::violate": "WEBPACK_HOT_MIDDLEWARE_VIOLATE_CSP=true npm run start:csp",
+    "start:headless-styling": "WEBPACK_CONFIG=./webpack.config.headless-styling.js node server.js",
     "start:multientry": "WEBPACK_CONFIG=./webpack.config.multientry.js node server.js"
   }
 }

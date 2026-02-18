@@ -2,6 +2,8 @@
 
 var clientOverlay = document.createElement('div');
 clientOverlay.id = 'webpack-hot-middleware-clientOverlay';
+clientOverlay.classList.add('webpack-hot-middleware-clientOverlay');
+
 var styles = {
   background: 'rgba(0,0,0,0.85)',
   color: '#e8e8e8',
@@ -37,13 +39,16 @@ var colors = {
 
 var htmlEntities = require('html-entities');
 
-function showProblems(type, lines) {
+function showProblems(type, lines, options) {
   clientOverlay.innerHTML = '';
   lines.forEach(function (msg) {
     msg = ansiHTML(htmlEntities.encode(msg));
     var div = document.createElement('div');
-    div.style.marginBottom = '26px';
-    div.innerHTML = problemType(type) + ' in ' + msg;
+    div.classList.add('webpack-hot-middleware-clientOverlay__problem-group');
+    if (options.overlayStyleMode === 'inline') {
+      div.style.marginBottom = '26px';
+    }
+    div.innerHTML = problemType(type, options) + ' in ' + msg;
     clientOverlay.appendChild(div);
   });
   if (document.body) {
@@ -57,17 +62,32 @@ function clear() {
   }
 }
 
-function problemType(type) {
+function problemType(type, options) {
+  var problemTypeSingularNames = {
+    errors: 'error',
+    warnings: 'warning',
+  };
+  var typeName = problemTypeSingularNames[type] || 'error';
+  var className = 'webpack-hot-middleware-clientOverlay__problem--' + typeName;
   var problemColors = {
     errors: colors.red,
     warnings: colors.yellow,
   };
-  var color = problemColors[type] || colors.red;
+  var styleAttributeFragment = '';
+  if (options.overlayStyleMode === 'inline') {
+    var color = problemColors[type] || colors.red;
+    styleAttributeFragment =
+      ' style="background-color:#' +
+      color +
+      '; color:#000000; padding:3px 6px; border-radius: 4px;"';
+  }
   return (
-    '<span style="background-color:#' +
-    color +
-    '; color:#000000; padding:3px 6px; border-radius: 4px;">' +
-    type.slice(0, -1).toUpperCase() +
+    '<span class="webpack-hot-middleware-clientOverlay__problem ' +
+    className +
+    '"' +
+    styleAttributeFragment +
+    '>' +
+    typeName.toUpperCase() +
     '</span>'
   );
 }
@@ -80,12 +100,14 @@ module.exports = function (options) {
     ansiHTML.setColors(colors);
   }
 
-  for (var style in options.overlayStyles) {
-    styles[style] = options.overlayStyles[style];
-  }
+  if (options.overlayStyleMode === 'inline') {
+    for (var style in options.overlayStyles) {
+      styles[style] = options.overlayStyles[style];
+    }
 
-  for (var key in styles) {
-    clientOverlay.style[key] = styles[key];
+    for (var key in styles) {
+      clientOverlay.style[key] = styles[key];
+    }
   }
 
   return {

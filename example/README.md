@@ -7,10 +7,15 @@
 ```sh
 npm install
 ```
-* Start server
+
+## Basic Hot Reload Example
+
+Start server:
+
 ```sh
 npm start
 ```
+
 * Open page in browser http://localhost:1616
 * Open the developer console
 * Edit `client.js` & save
@@ -27,3 +32,43 @@ npm run start:multientry
 
 * Open page in browser http://localhost:1616/multientry
 * Edit `client.js` or `extra.js` & save
+
+## CSP-compatible Styling Examples
+
+These scenarios run with a strict CSP configuration that disallow inline styles.
+
+### CSP Violation
+
+This scenario intentionally violates CSP rules by inlining the styles instead of importing from a CSS file.
+
+```sh
+npm run start:csp::violate
+```
+
+* Open the page in browser http://localhost:1616/csp
+* Try making a syntax error in `client.js`.
+* Check the console logs; CSP must be violated, styles must be blocked.
+
+### CSP-compatible Styling
+
+Since inline styles are disallowed, styles must be imported from a CSS file. To demonstrate this, the example uses `file-loader` and `style-loader` by setting the `injectType` option to `linkTag`.
+
+```sh
+npm run start:csp
+```
+
+* Open the page in browser http://localhost:1616/csp
+* Try making a syntax error in `client.js`.
+* Check the console logs; CSP must not be violated, styles must be applied.
+
+## Headless Styling Example
+
+This scenario demonstrates custom styling behavior.
+
+```sh
+npm run start:headless-styling
+```
+
+* Open the page in browser http://localhost:1616/headless-styling
+* Try making a syntax error in `client.js`.
+* The `ERROR` label must appear as white text on a black background only.

@@ -13,6 +13,7 @@ var options = {
   overlayStyles: {},
   overlayWarnings: false,
   ansiColors: {},
+  overlayStyleMode: 'inline', // 'headless', 'inline'
 };
 if (__resourceQuery) {
   var params = Array.from(new URLSearchParams(__resourceQuery.slice(1)));
@@ -73,6 +74,21 @@ function setOverrides(overrides) {
 
   if (overrides.overlayWarnings) {
     options.overlayWarnings = overrides.overlayWarnings == 'true';
+  }
+  if (overrides.overlayStyleMode) {
+    if (
+      overrides.overlayStyleMode === 'inline' ||
+      overrides.overlayStyleMode === 'headless'
+    ) {
+      options.overlayStyleMode = overrides.overlayStyleMode;
+    } else {
+      console.warn(
+        'Unsupported `overlayStyleMode` value. Expected one of `inline`, or `headless`.' +
+          'Falling back to the default mode: `' +
+          options.overlayStyleMode +
+          '`.'
+      );
+    }
   }
 }
 
@@ -167,10 +183,7 @@ function createReporter() {
 
   var overlay;
   if (typeof document !== 'undefined' && options.overlay) {
-    overlay = require('./client-overlay')({
-      ansiColors: options.ansiColors,
-      overlayStyles: options.overlayStyles,
-    });
+    overlay = require('./client-overlay')(options);
   }
 
   var styles = {
@@ -218,7 +231,7 @@ function createReporter() {
       }
       if (overlay) {
         if (options.overlayWarnings || type === 'errors') {
-          overlay.showProblems(type, obj[type]);
+          overlay.showProblems(type, obj[type], options);
           return false;
         }
         overlay.clear();
