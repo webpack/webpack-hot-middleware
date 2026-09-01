@@ -6,6 +6,15 @@ This module is **only** concerned with the mechanisms to connect a browser clien
 
 If you're using React then some common options are [react-transform-hmr](https://github.com/gaearon/react-transform-hmr/) and [react-hot-loader](https://github.com/gaearon/react-hot-loader).
 
+> [!NOTE]
+>
+> `webpack-dev-middleware` now serves hot module replacement itself, through its
+> [`hot`](https://github.com/webpack/webpack-dev-middleware#hot) option: one
+> middleware for both the assets and the event stream, with the browser runtime
+> shipped in the same package. The endpoint and the client query-string API are
+> compatible with this module, so migrating is mostly renaming — see the
+> [migration guide](https://github.com/webpack/webpack-dev-middleware/blob/main/migration-from-webpack-hot-middleware.md).
+
 [![npm version](https://img.shields.io/npm/v/webpack-hot-middleware.svg)](https://www.npmjs.com/package/webpack-hot-middleware) [![CircleCI](https://circleci.com/gh/webpack/webpack-hot-middleware/tree/main.svg?style=svg)](https://circleci.com/gh/webpack/webpack-hot-middleware/tree/main)[![codecov](https://codecov.io/gh/webpack/webpack-hot-middleware/branch/main/graph/badge.svg)](https://codecov.io/gh/webpack/webpack-hot-middleware)![MIT Licensed](https://img.shields.io/npm/l/webpack-hot-middleware.svg)
 
 ## Installation & Usage
