@@ -1,12 +1,10 @@
 # Webpack Hot Middleware
 
-Webpack hot reloading using only [webpack-dev-middleware](https://webpack.js.org/guides/development/#webpack-dev-middleware). This allows you to add hot reloading into an existing server without [webpack-dev-server](https://webpack.js.org/configuration/dev-server/).
-
-This module is **only** concerned with the mechanisms to connect a browser client to a webpack server & receive updates. It will subscribe to changes from the server and execute those changes using [webpack's HMR API](https://webpack.js.org/concepts/hot-module-replacement/). Actually making your application capable of using hot reloading to make seamless changes is out of scope, and usually handled by another library.
-
-If you're using React then some common options are [react-transform-hmr](https://github.com/gaearon/react-transform-hmr/) and [react-hot-loader](https://github.com/gaearon/react-hot-loader).
-
-> [!NOTE]
+> [!CAUTION]
+>
+> **This package is deprecated. Use
+> [`webpack-dev-middleware`](https://github.com/webpack/webpack-dev-middleware)
+> instead.**
 >
 > `webpack-dev-middleware` now serves hot module replacement itself, through its
 > [`hot`](https://github.com/webpack/webpack-dev-middleware#hot) option: one
@@ -14,6 +12,14 @@ If you're using React then some common options are [react-transform-hmr](https:/
 > shipped in the same package. The endpoint and the client query-string API are
 > compatible with this module, so migrating is mostly renaming — see the
 > [migration guide](https://github.com/webpack/webpack-dev-middleware/blob/main/migration-from-webpack-hot-middleware.md).
+>
+> This package will not receive new features. Please migrate.
+
+Webpack hot reloading using only [webpack-dev-middleware](https://webpack.js.org/guides/development/#webpack-dev-middleware). This allows you to add hot reloading into an existing server without [webpack-dev-server](https://webpack.js.org/configuration/dev-server/).
+
+This module is **only** concerned with the mechanisms to connect a browser client to a webpack server & receive updates. It will subscribe to changes from the server and execute those changes using [webpack's HMR API](https://webpack.js.org/concepts/hot-module-replacement/). Actually making your application capable of using hot reloading to make seamless changes is out of scope, and usually handled by another library.
+
+If you're using React then some common options are [react-transform-hmr](https://github.com/gaearon/react-transform-hmr/) and [react-hot-loader](https://github.com/gaearon/react-hot-loader).
 
 [![npm version](https://img.shields.io/npm/v/webpack-hot-middleware.svg)](https://www.npmjs.com/package/webpack-hot-middleware) [![CircleCI](https://circleci.com/gh/webpack/webpack-hot-middleware/tree/main.svg?style=svg)](https://circleci.com/gh/webpack/webpack-hot-middleware/tree/main)[![codecov](https://codecov.io/gh/webpack/webpack-hot-middleware/branch/main/graph/badge.svg)](https://codecov.io/gh/webpack/webpack-hot-middleware)![MIT Licensed](https://img.shields.io/npm/l/webpack-hot-middleware.svg)
 
